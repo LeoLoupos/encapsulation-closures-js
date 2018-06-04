@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+
+        <script>
+
+            var Managers = {}; //namespace
+
+            Managers.CssManager = (function(){ //singlenton CssManager
+
+            /*
+                private space
+            */
+                    
+            var doc = document;
+            var setAttributes = function(element, attributes){
+                for(attribute in attributes){
+                    element[attribute] = attributes[attribute];
+                }
+            }
+ 
+            return {
+                //Public members
+                addStyleSheet: function(id, url){
+                    var newStyleSheet = doc.createElement("link");
+                    setAttributes(newStyleSheet, {
+                        rel : "stylesheet",
+                        type : "text/css",
+                        id : id,
+                        href: url
+                    });
+                    doc.getElementsByTagName("head")[0].appendChild(newStyleSheet);
+                },
+
+                removeStyleSheet: function(id){
+                    var currentStyleSheet = doc.getElementById(id);
+                    if(currentStyleSheet){
+                        currentStyleSheet.parentNode.removeChild(currentStyleSheet);
+                    }
+                },
+                    
+                swapStyleSheet: function(id, url){
+                    this.removeStyleSheet(id);
+                    this.addStyleSheet(id, url);
+                }
+            }
+            
+        })(); //The pair of parentheses at the end makes the code get executed automatically.
+
+        Managers.CssManager.addStyleSheet("myStyleSheet", "Default.css"); //sets bg to blue
+        Managers.CssManager.swapStyleSheet("myStyleSheet", "Advanced.css"); //sets bg to red
+        Managers.CssManager.removeStyleSheet("myStyleSheet"); // remove style link
+
+
+        </script>
+    </body>
+</html>
